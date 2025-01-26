@@ -1,10 +1,20 @@
+import java.util.Scanner;
+
 public class Nic {
     public static void main(String[] args) {
-        String entry = "Hello! I'm Nic ";
-        String welcome = "How can I help you today?";
-        String exit = "Hope I was able to help you, goodbye";
-        System.out.println(entry);
-        System.out.println(welcome);
-        System.out.println(exit);
-   }
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Hello! I'm Nic.");
+        System.out.println("How can I help you today? (Type 'bye' to exit)");
+        while (true) {
+            System.out.print("You: ");
+            String userInput = scanner.nextLine();
+            if (userInput.equalsIgnoreCase("bye")) {
+                System.out.println("Nic: Hope I was able to help you, goodbye!");
+                break;
+            }
+            System.out.println("Nic: " + userInput);
+        }
+        scanner.close();
+    }
 }
+
