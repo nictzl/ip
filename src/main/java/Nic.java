@@ -2,7 +2,11 @@ import java.util.Scanner;
 
 public class Nic {
 
-    public static int getInputIndex(String command, int countUserInput) {
+    private static String [] userInputList = new String[100];
+    private static boolean [] taskStatus = new boolean[100];
+    private static int countUserInput = 0;
+
+    private static int getInputIndex(String command, int countUserInput) {
         String [] parts = command.split(" ");
         if (parts.length > 1) {
             int inputIndex = Integer.parseInt(parts[1]) - 1;
@@ -14,11 +18,43 @@ public class Nic {
         return -1;
     }
 
+    private static void list() {
+        System.out.println("____________________________________________________________");
+        if (countUserInput == 0) {
+            System.out.println("No entries yet.");
+        } else {
+            System.out.println("Here are the tasks in your list:");
+            for (int i = 0; i < countUserInput; i++) {
+                System.out.println((i + 1) + ".[" + (taskStatus[i] ? "X" : " ") + "] " + userInputList[i]);
+            }
+        }
+        System.out.println("____________________________________________________________");
+    }
+
+    private static void display(String userInput) {
+        if (countUserInput < 100) {
+            userInputList[countUserInput] = userInput; // Store the input
+            countUserInput++; // Increment task count
+            System.out.println("____________________________________________________________");
+            System.out.println("Added: " + userInput);
+            System.out.println("____________________________________________________________");
+        } else {
+            System.out.println("____________________________________________________________");
+            System.out.println("Task list is full! Cannot add more than 100 tasks.");
+            System.out.println("____________________________________________________________");
+        }
+    }
+
+    private static void mark(boolean input, int inputIndex) {
+        taskStatus[inputIndex] = input;
+        System.out.println("____________________________________________________________");
+        System.out.println("Nice! I've marked this task as done:");
+        System.out.println("[" + (taskStatus[inputIndex] ? "X" : " ") + "] " + userInputList[inputIndex]);
+        System.out.println("____________________________________________________________");
+    }
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        String [] userInputList = new String[100];
-        boolean [] taskStatus = new boolean[100];
-        int countUserInput = 0;
 
         System.out.println("Hello! I'm Nic.");
         System.out.println("How can I help you today? (Type 'bye' to exit)");
@@ -30,52 +66,22 @@ public class Nic {
                 break;
             }
             else if (userInput.equalsIgnoreCase("list")) {
-                System.out.println("____________________________________________________________");
-                if (countUserInput == 0) {
-                    System.out.println("No entries yet.");
-                } else {
-                    System.out.println("Here are the tasks in your list:");
-                    for (int i = 0; i < countUserInput; i++) {
-                        System.out.println((i + 1) + ".[" + (taskStatus[i] ? "X" : " ") + "] " + userInputList[i]);
-                    }
-                }
-                System.out.println("____________________________________________________________");
+                list();
             }
-
             else if (userInput.startsWith("mark")) {
                 int inputIndex = getInputIndex(userInput, countUserInput);
                 if (inputIndex != -1) {
-                    taskStatus[inputIndex] = true;
-                    System.out.println("____________________________________________________________");
-                    System.out.println("Nice! I've marked this task as done:");
-                    System.out.println("[" + (taskStatus[inputIndex] ? "X" : " ") + "] " + userInputList[inputIndex]);
-                    System.out.println("____________________________________________________________");
+                    mark(true, inputIndex);
                 }
             }
-
             else if (userInput.startsWith("unmark ")) {
                 int inputIndex = getInputIndex(userInput, countUserInput);
                 if (inputIndex != -1) {
-                    taskStatus[inputIndex] = false;
-                    System.out.println("____________________________________________________________");
-                    System.out.println("OK, I've marked this task as not done yet:");
-                    System.out.println("[" + (taskStatus[inputIndex] ? "X" : " ") + "] " + userInputList[inputIndex]);
-                    System.out.println("____________________________________________________________");
+                    mark(false, inputIndex);
                 }
             }
-
             else {
-                if (countUserInput < 100) {
-                    userInputList[countUserInput] = userInput; // Store the input
-                    countUserInput++; // Increment task count
-                    System.out.println("____________________________________________________________");
-                    System.out.println("Added: " + userInput);
-                    System.out.println("____________________________________________________________");
-                } else {
-                    System.out.println("____________________________________________________________");
-                    System.out.println("Task list is full! Cannot add more than 100 tasks.");
-                    System.out.println("____________________________________________________________");
-                }
+                display(userInput);
             }
         }
         scanner.close();
