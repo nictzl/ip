@@ -25,8 +25,7 @@ public class Nic {
         System.out.println();
         if (taskCount == 0) {
             System.out.println("No entries yet.");
-        }
-        else {
+        } else {
             System.out.println("Here are the tasks in your list:");
             for (int i = 0; i < taskCount; i++) {
                 System.out.println((i + INDEX_OFFSET) + "." + taskList[i]);
@@ -42,8 +41,7 @@ public class Nic {
             System.out.println(lineBreak);
             System.out.println("Added: " + userInput);
             System.out.println(lineBreak);
-        }
-        else {
+        } else {
             System.out.println(lineBreak);
             System.out.println("Task list is full! Cannot add more than 100 tasks.");
             System.out.println(lineBreak);
@@ -60,8 +58,7 @@ public class Nic {
             System.out.println("Now you have " + taskCount + " tasks in the list.");
             System.out.println(lineBreak);
 
-        }
-        else {
+        } else {
             System.out.println("Task list is full!");
         }
     }
@@ -111,8 +108,7 @@ public class Nic {
                 String[] parts = userInput.substring(9).split(" /by ",2);
                 if (parts.length == 2) {
                     addTask(new Deadline(parts[0].trim(), parts[1].trim()));
-                }
-                else {
+                } else {
                     System.out.println("Invalid format!");
                 }
             }
@@ -121,8 +117,7 @@ public class Nic {
                 String[] parts = userInput.substring(6).split(" /from | /to ", 3);
                 if (parts.length == 3) {
                     addTask(new Event(parts[0].trim(), parts[1].trim(), parts[2].trim()));
-                }
-                else {
+                } else {
                     System.out.println("Invalid format!");
                 }
             }
