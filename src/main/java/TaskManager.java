@@ -11,6 +11,33 @@ public class TaskManager {
         this.tasks = new ArrayList<>();
     }
 
+    public void addTodo(String userInput) {
+        String description = userInput.substring(5).trim();
+        if (description.isEmpty()) {
+            System.out.println("Invalid input. Description cannot be empty.");
+            return;
+        }
+        addTask(new Todo(description));
+    }
+
+    public void addDeadline(String userInput) {
+        String[] parts = userInput.substring(9).split(" /by ", 2);
+        if (parts.length != 2 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty()) {
+            System.out.println("Invalid format! Use: deadline <description> /by <time>");
+            return;
+        }
+        addTask(new Deadline(parts[0].trim(), parts[1].trim()));
+    }
+
+    public void addEvent(String userInput) {
+        String[] parts = userInput.substring(6).split(" /from | /to ", 3);
+        if (parts.length != 3 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty() || parts[2].trim().isEmpty()) {
+            System.out.println("Invalid format! Use: event <description> /from <start> /to <end>");
+            return;
+        }
+        addTask(new Event(parts[0].trim(), parts[1].trim(), parts[2].trim()));
+    }
+
     public void addTask(Task task) {
         if (tasks.size() < MAX_LIST_SIZE) {
             tasks.add(task);
@@ -67,12 +94,11 @@ public class TaskManager {
             }
 
         }
-        System.out.println("Invalid input. Please try again");
         return OUT_OF_BOUNDS;
     }
 
     public void displayTask(String userInput) {
-        if (tasks.size()< MAX_LIST_SIZE) {
+        if (tasks.size() < MAX_LIST_SIZE) {
             Task newTask = new Task(userInput); // Store the input
             tasks.add(newTask);
             System.out.println(lineBreak);
