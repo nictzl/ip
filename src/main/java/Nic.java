@@ -1,5 +1,3 @@
-import java.util.Scanner;
-
 public class Nic {
 
 
@@ -37,6 +35,10 @@ public class Nic {
 
             else if (userInput.startsWith("event")) {
                 taskManager.addEvent(userInput);
+            }
+
+            else if (userInput.startsWith("delete")) {
+                taskManager.deleteTask(userInput);
             }
 
             else {
