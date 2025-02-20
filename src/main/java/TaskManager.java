@@ -111,6 +111,7 @@ public class TaskManager {
         int inputIndex = getInputIndex(userInput);
         if (inputIndex >= 0 && inputIndex < tasks.size()) {
             Task removedTask = tasks.remove(inputIndex);
+            storage.saveTasks(tasks);
             System.out.println(lineBreak);
             System.out.println("Noted. I've removed this task:");
             System.out.println("  " + removedTask);

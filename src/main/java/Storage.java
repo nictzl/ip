@@ -6,6 +6,19 @@ public class Storage {
 
     public Storage(String filePath) {
         this.filePath = filePath;
+        ensureDirectoryExists();
+    }
+
+    private void ensureDirectoryExists() {
+        File file = new File(filePath);
+        File directory = file.getParentFile(); // Get the parent folder
+
+        if (directory != null && !directory.exists()) {
+            boolean created = directory.mkdirs(); // Create the "data" folder
+            if (!created) {
+                System.out.println("Warning: Failed to create directory " + directory.getAbsolutePath());
+            }
+        }
     }
 
     public void saveTasks(ArrayList<Task> tasks) {
