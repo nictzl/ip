@@ -8,6 +8,12 @@ public class Event extends Todo {
         this.to = to;
     }
 
+    public Event(String description, String from, String to, boolean isDone) {
+        super(description, isDone);
+        this.from = from;
+        this.to = to;
+    }
+
     @Override
     public String toString() {
         return "[E]" + getStatusIcon() + " " + description + " (from: " + from + " to: " + to + ")";
