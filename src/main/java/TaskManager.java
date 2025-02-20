@@ -1,14 +1,20 @@
 import java.util.ArrayList;
+import java.io.*;
+import java.nio.file.*;
+import java.util.Scanner;
 
 public class TaskManager {
     private static final int MAX_LIST_SIZE = 100;
     private static final int INDEX_OFFSET = 1;
     private static final String lineBreak = "____________________________________________________________";
     private static final int OUT_OF_BOUNDS = -1;
+    private static final String FILE_PATH = "data/Nicholas.txt";
     private final ArrayList<Task> tasks;
+    private final Storage storage;
 
     public TaskManager() {
-        this.tasks = new ArrayList<>();
+        this.storage = new Storage(FILE_PATH);
+        this.tasks = storage.loadTasks();
     }
 
     public void addTodo(String userInput) {
@@ -41,6 +47,7 @@ public class TaskManager {
     public void addTask(Task task) {
         if (tasks.size() < MAX_LIST_SIZE) {
             tasks.add(task);
+            storage.saveTasks(tasks);
             System.out.println(lineBreak);
             System.out.println("Got it. I've added the task:");
             System.out.println(" " + task);
@@ -68,6 +75,7 @@ public class TaskManager {
     public void markTodo(boolean done, int inputIndex) {
         if (inputIndex >= 0 && inputIndex < tasks.size()) {
             tasks.get(inputIndex).setDone(done);
+            storage.saveTasks(tasks);
             System.out.println(lineBreak);
             System.out.println(done ? "Nice! I've marked this task as done:" : "OK, I've marked this task as not done yet:");
             System.out.println(" " + tasks.get(inputIndex));
@@ -97,19 +105,7 @@ public class TaskManager {
         return OUT_OF_BOUNDS;
     }
 
-    public void displayTask(String userInput) {
-        if (tasks.size() < MAX_LIST_SIZE) {
-            Task newTask = new Task(userInput); // Store the input
-            tasks.add(newTask);
-            System.out.println(lineBreak);
-            System.out.println("Added: " + userInput);
-            System.out.println(lineBreak);
-        } else {
-            System.out.println(lineBreak);
-            System.out.println("Task list is full! Cannot add more than 100 tasks.");
-            System.out.println(lineBreak);
-        }
-    }
+
 
     public void deleteTask(String userInput) {
         int inputIndex = getInputIndex(userInput);

@@ -1,0 +1,3 @@
+T | 0 | study
+T | 1 | study
+T | 0 | vball

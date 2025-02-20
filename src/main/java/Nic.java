@@ -1,3 +1,4 @@
+
 public class Nic {
 
 
@@ -42,7 +43,7 @@ public class Nic {
             }
 
             else {
-                taskManager.displayTask(userInput);
+                System.out.println("Invalid command");
             }
         }
         ui.closeScanner();
