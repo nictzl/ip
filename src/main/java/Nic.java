@@ -1,52 +1,17 @@
-
 public class Nic {
-
 
     public static void main(String[] args) {
         UserInterface ui = new UserInterface();
         TaskManager taskManager = new TaskManager();
+        Parser parser = new Parser(taskManager, ui);
+
         ui.showWelcomeMessage();
         while (true) {
             String userInput = ui.getUserInput().toLowerCase();
-
-            if (userInput.equalsIgnoreCase("bye")) {
-                ui.showExitMessage();
+            if (parser.parseInput(userInput)) {
                 break;
-            }
-            else if (userInput.equalsIgnoreCase("list")) {
-                taskManager.listTask();
-            }
-            else if (userInput.startsWith("mark")) {
-                int inputIndex = taskManager.getInputIndex(userInput);
-                taskManager.markTodo(true, inputIndex);
-            }
-
-            else if (userInput.startsWith("unmark")) {
-                int inputIndex = taskManager.getInputIndex(userInput);
-                taskManager.markTodo(false, inputIndex);
-            }
-
-            else if (userInput.startsWith("todo")) {
-                taskManager.addTodo(userInput);
-            }
-
-            else if (userInput.startsWith("deadline")) {
-                taskManager.addDeadline(userInput);
-            }
-
-            else if (userInput.startsWith("event")) {
-                taskManager.addEvent(userInput);
-            }
-
-            else if (userInput.startsWith("delete")) {
-                taskManager.deleteTask(userInput);
-            }
-
-            else {
-                System.out.println("Invalid command");
             }
         }
         ui.closeScanner();
     }
 }
-
