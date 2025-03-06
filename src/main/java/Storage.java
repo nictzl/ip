@@ -20,7 +20,12 @@ public class Storage {
             }
         }
     }
-    
+
+    /***
+     * Returns nothing
+     * Encodes all the task in tasklist and writes encoded task into text file storage
+     * @param tasks tasklist
+     */
     public void saveTasks(ArrayList<Task> tasks) {
         try {
             FileWriter fw = new FileWriter(filePath);
@@ -33,6 +38,10 @@ public class Storage {
         }
     }
 
+    /***
+     * Reads text file storage, decodes the encoded task and adds the task into a tasklist
+     * @return A tasklist
+     */
     public ArrayList<Task> loadTasks() {
         ArrayList<Task> tasks = new ArrayList<>();
         File file = new File(filePath);
