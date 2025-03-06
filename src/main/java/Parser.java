@@ -7,6 +7,12 @@ public class Parser {
         this.ui = ui;
     }
 
+    /***
+     * Method checks for command keyword entered by the user and calls corresponding method from task manager
+     * If command keyword is not recognised, 'Invalid command' will be output
+     * @param userInput The command entered in from CLI
+     * @return false unless a 'bye' command is entered
+     */
     public boolean parseInput(String userInput) {
         if (userInput.equalsIgnoreCase("bye")) {
             ui.showExitMessage();

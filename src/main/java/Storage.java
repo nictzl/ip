@@ -20,7 +20,7 @@ public class Storage {
             }
         }
     }
-
+    
     public void saveTasks(ArrayList<Task> tasks) {
         try {
             FileWriter fw = new FileWriter(filePath);
