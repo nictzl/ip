@@ -4,8 +4,8 @@
 
 
 
-Nic is a chatbot that can help you keep track of your tasks and stores it for you in a data folder.
-In the formats below, ellipsis means non-empty values,
+Nic is a chatbot that can help you keep track of your tasks, their status and stores them for you in a data folder.
+In the formats below, ellipsis means non-empty values. Tasks are characterised as todos, deadlines or events
 
 ## Adding Todos
 
