@@ -35,6 +35,9 @@ public class Parser {
         else if (userInput.startsWith("delete")) {
             taskManager.deleteTask(userInput);
         }
+        else if (userInput.startsWith("find")) {
+            taskManager.findTask(userInput);
+        }
         else {
             System.out.println("Invalid command");
         }

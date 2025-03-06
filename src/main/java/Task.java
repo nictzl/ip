@@ -5,7 +5,9 @@ public class Task {
         this.description = description;
         isDone = false;
     }
-
+    public String getDescription() {
+        return description;
+    }
     public void setDone(boolean input) {
         this.isDone = input;
     }

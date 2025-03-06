@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.io.*;
 import java.nio.file.*;
+import java.util.List;
 import java.util.Scanner;
 
 public class TaskManager {
@@ -122,4 +123,22 @@ public class TaskManager {
         }
     }
 
+    public void findTask(String userInput) {
+        String[] parts = userInput.split(" ", 2);
+        String keyword = parts[1];
+        List<Task> found = new ArrayList<>();
+        for (Task task : tasks) {
+            if (task.getDescription().contains(keyword)) {
+                found.add(task);
+            }
+        }
+        if (found.isEmpty()) {
+            System.out.println("No matching tasks found.");
+        } else {
+            System.out.println("Here are the matching tasks in your list:");
+            for (int i = 0; i < found.size(); i++) {
+                System.out.println((i + 1) + ". " + found.get(i));
+            }
+        }
+    }
 }
