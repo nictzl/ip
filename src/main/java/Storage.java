@@ -70,7 +70,8 @@ public class Storage {
         } else if (task instanceof Deadline) {
             return "D | " + (task.isDone ? "1" : "0") + " | " + task.description + " | " + ((Deadline) task).by;
         } else if (task instanceof Event) {
-            return "E | " + (task.isDone ? "1" : "0") + " | " + task.description + " | " + ((Event) task).from + " | " + ((Event) task).to;
+            return "E | " + (task.isDone ? "1" : "0") + " | " + task.description + " | "
+                    + ((Event) task).from + " | " + ((Event) task).to;
         }
         return "";
     }

@@ -1,8 +1,5 @@
 import java.util.ArrayList;
-import java.io.*;
-import java.nio.file.*;
 import java.util.List;
-import java.util.Scanner;
 
 /***
  * userlist represents list displayed to the user
@@ -12,7 +9,7 @@ import java.util.Scanner;
 public class TaskManager {
     private static final int MAX_LIST_SIZE = 100;
     private static final int INDEX_OFFSET = 1;
-    private static final String lineBreak = "____________________________________________________________";
+    private static final String LINE_BREAK = "____________________________________________________________";
     private static final int OUT_OF_BOUNDS = -1;
     private static final String FILE_PATH = "data/Nicholas.txt";
     private final ArrayList<Task> tasks;
@@ -29,12 +26,12 @@ public class TaskManager {
      * @param userInput command entered in from CLI
      */
     public void addTodo(String userInput) {
-        String description = userInput.substring(5).trim(); //extracts out the task to add
-        if (description.isEmpty()) {
-            System.out.println("Invalid input. Description cannot be empty.");
+        String[] description = userInput.split(" "); //extracts out the task to add
+        if (description.length <= 1) {
+            System.out.println("Invalid input. Use: todo <description>.");
             return;
         }
-        addTask(new Todo(description));
+        addTask(new Todo(description[1]));
     }
 
     public void addDeadline(String userInput) {
@@ -48,7 +45,8 @@ public class TaskManager {
 
     public void addEvent(String userInput) {
         String[] parts = userInput.substring(6).split(" /from | /to ", 3);
-        if (parts.length != 3 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty() || parts[2].trim().isEmpty()) { //extracts out the task to add
+        //extracts out the task to add
+        if (parts.length != 3 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty() || parts[2].trim().isEmpty()) {
             System.out.println("Invalid format! Use: event <description> /from <start> /to <end>");
             return;
         }
@@ -62,18 +60,17 @@ public class TaskManager {
      * @param task A Task object containing description and status of task
      */
     public void addTask(Task task) {
-        if (tasks.size() < MAX_LIST_SIZE) {
-            tasks.add(task);
-            storage.saveTasks(tasks);
-            System.out.println(lineBreak);
-            System.out.println("Got it. I've added the task:");
-            System.out.println(" " + task);
-            System.out.println("Now you have " + tasks.size() + " tasks in the list.");
-            System.out.println(lineBreak);
-
-        } else {
+        if (tasks.size() >= MAX_LIST_SIZE) {
             System.out.println("Task list is full!");
+            return;
         }
+        tasks.add(task);
+        storage.saveTasks(tasks);
+        System.out.println(LINE_BREAK);
+        System.out.println("Got it. I've added the task:");
+        System.out.println(" " + task);
+        System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+        System.out.println(LINE_BREAK);
     }
 
     /***
@@ -90,7 +87,7 @@ public class TaskManager {
                 System.out.println((i + INDEX_OFFSET) + ". " + tasks.get(i));
             }
         }
-        System.out.println(lineBreak);
+        System.out.println(LINE_BREAK);
     }
 
     /***
@@ -99,20 +96,26 @@ public class TaskManager {
      * @param inputIndex An integer representing the numbered task on the userlist
      */
     public void markTodo(boolean done, int inputIndex) {
-        if (inputIndex >= 0 && inputIndex < tasks.size()) {
+        try {
+            if (inputIndex < 0 || inputIndex >= tasks.size()) {
+                throw new IndexOutOfBoundsException("Invalid input, Use: mark <number>. " +
+                        "Please make sure number is in list!");
+            }
             tasks.get(inputIndex).setDone(done);
             storage.saveTasks(tasks);
-            System.out.println(lineBreak);
-            System.out.println(done ? "Nice! I've marked this task as done:" : "OK, I've marked this task as not done yet:");
+            System.out.println(LINE_BREAK);
+            System.out.println(done ? "Nice! I've marked this task as done:" :
+                    "OK, I've marked this task as not done yet:");
             System.out.println(" " + tasks.get(inputIndex));
-            System.out.println(lineBreak);
-        } else {
-            System.out.println("Invalid task number!");
+            System.out.println(LINE_BREAK);
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println(e.getMessage());
         }
     }
 
     /***
-     * Converts a string input from user about the number of the task in userlist to its integer value of it in the tasklist
+     * Converts a string input from user about the number of the task in userlist
+     * to its integer value of it in the tasklist
      * @param command user command entered in CLI
      * @return index of task in list
      */
@@ -125,7 +128,8 @@ public class TaskManager {
                     return inputIndex;
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Invalid index");
+                System.out.println("Invalid input, Use: command <number>. " +
+                        "Please make sure number is in list!");
             }
 
         }
@@ -140,16 +144,20 @@ public class TaskManager {
      */
     public void deleteTask(String userInput) {
         int inputIndex = getInputIndex(userInput);
-        if (inputIndex >= 0 && inputIndex < tasks.size()) {
+        try {
+            if (inputIndex < 0 || inputIndex >= tasks.size()) {
+                throw new IndexOutOfBoundsException("Invalid input, Use: delete <number>. " +
+                        "Please make sure number is in list!");
+            }
             Task removedTask = tasks.remove(inputIndex);
             storage.saveTasks(tasks);
-            System.out.println(lineBreak);
+            System.out.println(LINE_BREAK);
             System.out.println("Noted. I've removed this task:");
             System.out.println("  " + removedTask);
             System.out.println("Now you have " + tasks.size() + " tasks in the list.");
-            System.out.println(lineBreak);
-        } else {
-            System.out.println("Invalid task number!");
+            System.out.println(LINE_BREAK);
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -159,21 +167,28 @@ public class TaskManager {
      * @param userInput Input from user at CLI
      */
     public void findTask(String userInput) {
-        String[] parts = userInput.split(" ", 2); //extracts keyword from user
-        String keyword = parts[1];
-        List<Task> found = new ArrayList<>();
-        for (Task task : tasks) {
-            if (task.getDescription().contains(keyword)) {
-                found.add(task);
+        try {
+            String[] parts = userInput.split(" ", 2);
+            if (parts.length < 2 || parts[1].trim().isEmpty()) {
+                throw new IllegalArgumentException("Keyword cannot be empty. Use: find keyword");
             }
-        }
-        if (found.isEmpty()) {
-            System.out.println("No matching tasks found.");
-        } else {
-            System.out.println("Here are the matching tasks in your list:");
-            for (int i = 0; i < found.size(); i++) {
-                System.out.println((i + 1) + ". " + found.get(i));
+            String keyword = parts[1];
+            List<Task> found = new ArrayList<>();
+            for (Task task : tasks) {
+                if (task.getDescription().contains(keyword)) {
+                    found.add(task);
+                }
             }
+            if (found.isEmpty()) {
+                System.out.println("No matching tasks found.");
+            } else {
+                System.out.println("Here are the matching tasks in your list:");
+                for (int i = 0; i < found.size(); i++) {
+                    System.out.println((i + 1) + ". " + found.get(i));
+                }
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid input: " + e.getMessage());
         }
     }
 }
